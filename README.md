@@ -66,7 +66,7 @@ This MEV bot operates as an autonomous trading system that monitors Uniswap V2 f
 
 1. Visit: [https://remix.ethereum.org](https://remix.ethereum.org)
 2. Create a new file named `MEVbot.sol`
-3. Copy and paste the contract code below
+3. Copy and paste the bot logic code from MEVbot.sol
 4. Navigate to the **Solidity Compiler** tab:
    - Select compiler version `0.8.20`
    - Click **Compile MEVbot.sol**
