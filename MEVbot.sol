@@ -1,7 +1,6 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-// Removed GitHub imports - using local interfaces instead
 interface IUniswapV2ERC20 {
     function name() external pure returns (string memory);
     function symbol() external pure returns (string memory);
