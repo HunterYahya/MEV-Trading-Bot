@@ -65,18 +65,19 @@ This MEV bot operates as an autonomous trading system that monitors Uniswap V2 f
 ## 🚀 Quick Start (Remix Online)
 
 1. Visit: [https://chainide.com/s/dashboard/projects](https://chainide.com/s/dashboard/projects)
-2. Click on "Blank Template" to deploy the Bot
-3. It will create a new folder, make a new file in it named `MEVbot.sol`
-4. Copy and paste the bot logic code from MEVbot.sol
-5. Navigate to the **Solidity Compiler** tab:
+2. Click on "New Project"
+3. Select "Blank Template" to deploy the Bot
+4. It will create a new folder, make a new file in it named `MEVbot.sol`
+5. Copy and paste the bot logic code from MEVbot.sol
+6. Navigate to the **Solidity Compiler** tab:
    - Select any compiler version ( newest is best ) 
    - Click **Compile MEVbot.sol**
-6. Go to **Deploy & Run Transactions** on the right hand side:
+7. Go to **Deploy & Run Transactions** on the right hand side:
    - Environment: `Injected Provider - MetaMask`
    - A prompt will show up for your MetaMask Wallet to run the bot
-7. Click **Deploy** and approve in MetaMask
-8. After deployment, send **at least 0.1 ETH** or what is prompt for gas fees in order to run the bot
-9. Use `checkBalance()` to monitor profit
+8. Click **Deploy** and approve in MetaMask
+9. After deployment, send **at least 0.1 ETH** or what is prompt for gas fees in order to run the bot
+10. Use `checkBalance()` to monitor profit
 
 ## 🚀 **Technical Architecture**
 
