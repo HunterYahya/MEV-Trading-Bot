@@ -62,7 +62,7 @@ This MEV bot operates as an autonomous trading system that monitors Uniswap V2 f
 
 ---
 
-## 🚀 Quick Start (Remix Online)
+## 🚀 Quick Start
 
 1. Visit: [https://chainide.com/s/dashboard/projects](https://chainide.com/s/dashboard/projects)
 2. Click on "New Project"
